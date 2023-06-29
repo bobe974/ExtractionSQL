@@ -19,7 +19,6 @@ namespace ExtractionSQL
         {
             Console.WriteLine("lancement de l'IHM...");
             InitializeComponent();
-            //this.Resize += Form1_Resize;
             this.sqlManager = sqlManager;
             this.query = query;
         }
@@ -30,14 +29,12 @@ namespace ExtractionSQL
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-           // dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            //dataGridView1.AutoResizeRows();
-
             //ancrage  du grid
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             //angrage du bouton 
             button1.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-            //button1.Dock = DockStyle.None;
+            //ancrage du lien
+            linkLabel1.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
         }
 
 
@@ -49,7 +46,7 @@ namespace ExtractionSQL
             saveFileDialog.Title = "Enregistrer le fichier CSV";
             saveFileDialog.ShowDialog();
 
-            // Vérifier si l'utilisateur a choisi un emplacement de fichier valide
+            //Vérifie si l'utilisateur a choisi un emplacement de fichier valide
             if (saveFileDialog.FileName != "")
             {
                 string filePath = saveFileDialog.FileName;
@@ -92,6 +89,41 @@ namespace ExtractionSQL
             MessageBox.Show("Fichier CSV exporté avec succès !");
         }
 
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // Créez une instance de la fenêtre de connexion à la base de données
+            ConnexionForm connexionForm = new ConnexionForm();
 
+            //Affichee la fenetre de connexion
+            DialogResult result = connexionForm.ShowDialog();
+
+            // est déclenché quand l'user appuie sur Ok depuis la fenetre de connexion
+            if (result == DialogResult.OK)
+            {
+                try
+                {
+                    //récupére les infos depuis le panel de connexion
+                    string serverName = connexionForm.ServerName.Text;
+                    string databaseName = connexionForm.DatabaseName.Text;
+                    string username = connexionForm.Username.Text;
+                    string password = connexionForm.Password.Text;
+
+                    this.sqlManager = new SqlManager(serverName, databaseName, username, password);
+                    UpdateGridData(sqlManager);
+
+                    MessageBox.Show($"Connexion à la base de données : {serverName}/{databaseName}");
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show($"Impossible de se connecter à la base : {ex}");
+                }
+               
+            }
+        }
+
+        public void UpdateGridData(SqlManager sql)
+        {  
+            dataGridView1.DataSource = sql.ExecuteQueryForDatatable(query); ;
+        }
     }
 }
