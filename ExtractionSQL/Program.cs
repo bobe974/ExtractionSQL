@@ -14,7 +14,7 @@ namespace ExtractionSQL
     {
         public static string inifilePath = Path.Combine(Directory.GetCurrentDirectory(), "config.ini");
         public static SqlManager sqlManager = null;
-        static string query = "SELECT fdl.AR_Ref AS Ref_Article, AR_Design AS Designation, SUM(Dl_Qte) AS besoin_cumule FROM F_DOCLIGNE fdl " +
+        static string query = "SELECT fdl.AR_Ref AS Ref_Article, AR_Design AS Designation, SUM(Dl_Qte) AS Besoin_cumule FROM F_DOCLIGNE fdl " +
                    "INNER JOIN F_ARTICLE fa ON fdl.AR_Ref = fa.AR_Ref " +
                    "WHERE DO_Type = 24 " +
                    "GROUP BY fdl.AR_Ref, AR_Design";
@@ -74,23 +74,23 @@ namespace ExtractionSQL
             {
                 sqlManager = new SqlManager(servername, DbName, user, pwd);
                
-                if(sqlManager.TransformSqlToCsv(query, outputPath))
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("Données exportées!");
-                    Console.WriteLine();
-                    Console.WriteLine("--------------------------------------------------------------------------------------");
-                    Console.WriteLine("Chemin du fichier -> " + outputPath);
-                    Console.WriteLine("--------------------------------------------------------------------------------------");
-                }
+                //if(sqlManager.TransformSqlToCsv(query, outputPath))
+                //{
+                //    Console.WriteLine();
+                //    Console.WriteLine("Données exportées!");
+                //    Console.WriteLine();
+                //    Console.WriteLine("--------------------------------------------------------------------------------------");
+                //    Console.WriteLine("Chemin du fichier -> " + outputPath);
+                //    Console.WriteLine("--------------------------------------------------------------------------------------");
+                //}
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);              
             }
 
-            Console.WriteLine("Appuyez sur la touche ENTRER fermer le programme");
-            Console.ReadLine();
+            //Console.WriteLine("Appuyez sur la touche ENTRER fermer le programme");
+            //Console.ReadLine();
 
             /*********************************************************************************************************/
             //partie IHM

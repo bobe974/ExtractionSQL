@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ namespace ExtractionSQL
             dataGridView1.DataSource = sqlManager.ExecuteQueryForDatatable(query);
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
            // dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             //dataGridView1.AutoResizeRows();
 
@@ -53,17 +55,43 @@ namespace ExtractionSQL
                 string filePath = saveFileDialog.FileName;
 
                 // Exporter les données vers le fichier CSV
-                sqlManager.TransformSqlToCsv(query, filePath);
+                //sqlManager.TransformSqlToCsv(query, filePath);  //export la requete 
+                ExportToCsv(filePath);  // export gridPane
 
-                // Afficher un message de succès ou effectuer d'autres actions nécessaires
-                MessageBox.Show("Fichier CSV exporté avec succès !");
+               // MessageBox.Show("Fichier CSV exporté avec succès !");
             }
 
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void ExportToCsv(string filePath)
         {
+            StringBuilder sb = new StringBuilder();
 
+            //En-têtes de colonnes
+            foreach (DataGridViewColumn column in dataGridView1.Columns)
+            {
+                sb.Append(column.HeaderText);
+                sb.Append(",");
+            }
+            sb.AppendLine();
+
+            //Contenu des lignes
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    sb.Append(cell.Value?.ToString().Replace(",", "") ?? "");
+                    sb.Append(",");
+                }
+                sb.AppendLine();
+            }
+
+            //Écrire le contenu dans le fichier CSV
+            File.WriteAllText(filePath, sb.ToString());
+
+            MessageBox.Show("Fichier CSV exporté avec succès !");
         }
+
+
     }
 }
