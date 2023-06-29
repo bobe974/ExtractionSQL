@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ExtractionSQL
 {
@@ -71,7 +72,6 @@ namespace ExtractionSQL
             //partie console
             try
             {
-                //"LAPTOP-4K6IVRS5", "STOCKSERVICE", "", ""
                 sqlManager = new SqlManager(servername, DbName, user, pwd);
                
                 if(sqlManager.TransformSqlToCsv(query, outputPath))
@@ -94,8 +94,14 @@ namespace ExtractionSQL
 
             /*********************************************************************************************************/
             //partie IHM
-            Window ihm = new Window(sqlManager, query); //      Window ihm = new Window(sqlManager.ExecuteQueryForDatatable(query), sqlManager);
-            ihm.ShowDialog();
+            //Window ihm = new Window(sqlManager, query); //      Window ihm = new Window(sqlManager.ExecuteQueryForDatatable(query), sqlManager);
+            //ihm.ShowDialog();
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Window(sqlManager, query));
+
+
             Console.ReadLine();
         }
     }
