@@ -15,6 +15,7 @@ namespace ExtractionSQL
     {
         SqlManager sqlManager;
         string query;
+
         public Window(SqlManager sqlManager, string query)
         {
             Console.WriteLine("lancement de l'IHM...");
@@ -34,7 +35,13 @@ namespace ExtractionSQL
             //angrage du bouton 
             button1.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             //ancrage du lien
-            linkLabel1.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            linkLabel1.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom ;
+            //ancrage datePicker
+            dateTimePicker1.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
+            //label
+            label1.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
+            //bouton de validation date
+            button2.Anchor =  AnchorStyles.Right | AnchorStyles.Bottom;
         }
 
 
@@ -124,6 +131,24 @@ namespace ExtractionSQL
         public void UpdateGridData(SqlManager sql)
         {  
             dataGridView1.DataSource = sql.ExecuteQueryForDatatable(query); ;
+        }
+
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //date selectionné
+            DateTime selectedDate = dateTimePicker1.Value;
+            // Formater la date dans le format SQL attendu
+            string formattedDate = selectedDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+            query = "SELECT fdl.AR_Ref AS Ref_Article, AR_Design AS Designation, fas.AS_QteSto AS StockReel, SUM(Dl_Qte) AS Besoin_cumule  FROM F_DOCLIGNE fdl  " +
+                   " INNER join F_ARTICLE fa ON fdl.AR_Ref = fa.AR_Ref  " +
+                   " inner join F_ARTSTOCK fas ON fas.AR_Ref = fa.AR_Ref  " +
+                   "WHERE DO_Type = 24 AND fdl.DO_Date < '" + formattedDate +
+                   "' GROUP BY fdl.AR_Ref, AR_Design, fas.AS_QteSto";
+            UpdateGridData(sqlManager);
+
+            MessageBox.Show($"Actualisation des données réussi");
         }
     }
 }

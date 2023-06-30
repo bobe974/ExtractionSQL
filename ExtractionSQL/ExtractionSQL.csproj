@@ -7,7 +7,7 @@
     <ProjectGuid>{51F7034B-6220-4592-88E9-CB04A6683978}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ExtractionSQL</RootNamespace>
-    <AssemblyName>ExtractionSQL</AssemblyName>
+    <AssemblyName>Visualisation des besoins</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
