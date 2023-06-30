@@ -14,12 +14,16 @@ namespace ExtractionSQL
     {
         public static string inifilePath = Path.Combine(Directory.GetCurrentDirectory(), "config.ini");
         public static SqlManager sqlManager = null;
-        static string query = "SELECT fdl.AR_Ref AS Ref_Article, AR_Design AS Designation, fas.AS_QteSto AS StockReel, SUM(Dl_Qte) AS Besoin_cumule  FROM F_DOCLIGNE fdl  " +
+        static string query = "SELECT fdl.AR_Ref AS Ref_Article, AR_Design AS Designation, SUM(Dl_Qte) AS Besoin_cumule  FROM F_DOCLIGNE fdl  " +
                    " INNER join F_ARTICLE fa ON fdl.AR_Ref = fa.AR_Ref  " +
-                   " inner join F_ARTSTOCK fas ON fas.AR_Ref = fa.AR_Ref  " +
                    "WHERE DO_Type = 24 " +
-                   " GROUP BY fdl.AR_Ref, AR_Design, fas.AS_QteSto";
-        
+                   " GROUP BY fdl.AR_Ref, AR_Design";
+
+        //static string query = "SELECT fdl.AR_Ref AS Ref_Article, AR_Design AS Designation, fas.AS_QteSto AS StockReel, SUM(Dl_Qte) AS Besoin_cumule  FROM F_DOCLIGNE fdl  " +
+        //           " INNER join F_ARTICLE fa ON fdl.AR_Ref = fa.AR_Ref  " +
+        //           " inner join F_ARTSTOCK fas ON fas.AR_Ref = fa.AR_Ref  " +
+        //           "WHERE DO_Type = 24 " +
+        //           " GROUP BY fdl.AR_Ref, AR_Design, fas.AS_QteSto";
 
         [STAThread]
         static void Main(string[] args)
